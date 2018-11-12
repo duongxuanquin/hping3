@@ -7,6 +7,11 @@
 - [3. Cách sử dụng hping](#3)
     - [3.1 Base options](#31)
     - [3.2 Protocol selection](#32)
+    - [3.3 Ip Related options](#33)
+    - [3.4 ICMP Related options](#34)
+    - [3.5 TCP/UDP Related options](#35)
+    - [3.6 Common options](#36)
+    - [3.7 TCP output format](#37)
 
 <a name="1"></a>
 
@@ -55,8 +60,9 @@ hping3 --h
 - --fast: Alias for -i u10000. Hping will send 10 packets for second.
 - --faster: Alias for -i u1. Nhanh hơn --fast
 -- flood: Gửi gới tin ngay lập tức, không cần quan tâm tới các bản tin reply trả lại 
-
-
+- -I --interface name: Default hping3 sử dụng cổng mặc định
+- -V --verbose: Enable verbose output
+- -D --debug: Khi enable mode này, chúng ta sẽ tìm thấy một vài thông tin về lỗi gặp phải khi sử dụng hping3 như: interface detection, data link layer access, interface settings..
 
 <a name="32"></a>
 
@@ -84,3 +90,49 @@ hping --scan '1-1024,!known' -S target.host.com
 ```
 
 - -9 --listen signature: HPING3 listen mode, using this option hping3 waits for packet that contain signature and dump from signature end to packet's end. For example if hping3 --listen TEST reads a packet that contain 234-09sdflkjs45-TESThello_world it will display hello_world.
+
+<a name="33"></a>
+
+### 3.3 Ip Related options
+- --a --spoof hostname: Dùng để fake ip address
+- --rand-source: Khi bật mode này, hping sẽ gửi các gói tin với địa chỉ random 
+- --rand-dest: Khi bật mode này, hping sẽ gửi các gói tin tới địa chỉ đích mà đã được chỉ định sẵn
+- -t --ttl time to live: Dùng để set TTL cho outgoing packet
+- -f --frag: Dùng cho phân tách gói tin
+- -x --morefrag: Tiếp tục phân tách gói tin
+- -y --dontfrag: 
+- -m --mtu: Thiết lập virtual mtu
+- -o --tos: Thiết lập Type of Service
+
+<a name="34"></a>
+
+### 3.4 ICMP Related options
+
+- -C --icmptype: Set icmp type, mặc định là icmp echo request
+- -K --icmpcode: Set icmp code, mặc định là 0
+- --icmp-ipver: Set version của IP header, mặc định version 4
+- --icmp-ip len: Set IP packet length of IP header contained into ICMP data, default is the real length.
+
+<a name="35"></a>
+
+### 3.5 TCP/UDP Related options
+
+- -s --baseport source port: Chỉ định source port, mặc định source port là random, sử dụng options này để thiêt lập different number
+- -p --destport [+][+] dest port: Thiết lập destination port. Nếu set `+`, desport sẽ tăng lên sau mỗi lần nhận được reply. Nếu set double `+`, destport sẽ tăng lên sau mỗi lần gửi packet
+- --keep: Thuộc tính này nằm về source port
+- -w --win: Thiếp lập window size
+- -O -tcpofff: Set fake tcp data offset. Normal data offset is tcphdrlen / 4.
+- -M --setseq: Thiết lập TCP sequence number
+- -L --setack: Thiết lập TCP ack
+- -Q --seqnum: Options này được sử dụng để thu thập SN đươc tạo ra bởi dest host. 
+- -b --badcksum: Gui packet vowis bad UDP/TCP checksum
+- --tcp-timestamp: Enable the TCP timestamp option, and try to guess the timestamp update frequency and the remote system uptime.
+-
+
+<a name="3.6"></a>
+
+### 3.6 Common options
+
+<a name="3.7"></a>
+
+### 3.7 TCP output format
