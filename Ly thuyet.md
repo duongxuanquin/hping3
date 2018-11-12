@@ -73,6 +73,8 @@ Giao thức mặc định là TCP, hping3 sẽ gửi tiêu đề tcp tới port 
 - -1 --icmp: ICMP mode, hping3 gửi ICMP echo-request, có thể set thêm type/code sử dụng `--icmptype --icmpcode`
 - -2 --udp: UDP mode, hping3 send udp to target port 0
 - -8 --scan: Tùy chọn này mô tả 1 group port để scan
+- --9 --listen signature: Hping3 listen mode, using option hping3 waits for packet that contain signature and dump from signature end to packet's and.
+
 Ví dụ:
 
 ```
@@ -132,7 +134,27 @@ hping --scan '1-1024,!known' -S target.host.com
 <a name="3.6"></a>
 
 ### 3.6 Common options
+- -d --data data size: Thiết lập packet body size. Ví dụ, --data 40, hping3 will not generate 0 byte packet but protocol_header + 40 bytes
 
-<a name="3.7"></a>
+hping3 sẽ hiển thị size information như sau:
 
-### 3.7 TCP output format
+```
+HPING www.yahoo.com (ppp0 204.71.200.67): NO FLAGS are set, 40 headers + 40 data bytes
+```
+
+- -E --file filename: Sử dụng filename contents to fill packets data
+- -j --dump: Dump received packets in hex
+- -B --safe: Kích hoạt mode này, các gói bị mất trong quá trình truyền sẽ được truyền lại.
+
+Ví dụ gửi file /etc/passwd từ host A tới host B, sử dụng như sau:
+
+```
+[host_a]
+# hping3 host_b --udp -p 53 -d 100 --sign signature --safe --file /etc/passwd
+[host_b]
+# hping3 host_a --listen signature --safe --icmp
+```
+
+- -u --end: If you are using --file filename option, tell you when EOF has been reached. Moreover prevent that other end accept more packets. Please, for more information see the HPING3-HOWTO.
+- -T --traceroute: Traceroute mode. Sử dụng option này sẽ tăng ttl cho mỗi ICMP nhận được
+
